@@ -1,10 +1,11 @@
 <h2 id="title">Minesweeper in Ember.js</h2>
 <label>Number of rows/columns: {{input type='number' size=5 value=dimensions}}</label><br>
 <label>difficulty:</label>
-  <select>
-    <option value="easy" selected="selected">easy</option>
-    <option value="medium">medium</option>
-    <option value="hard">hard</option>
-  </select>
+{{#x-select value=difficulty}}
+  {{#x-option value='easy'}}easy{{/x-option}}
+  {{#x-option value='medium'}}medium{{/x-option}}
+  {{#x-option value='hard'}}hard{{/x-option}}
+{{/x-select}}
+
 <br>
 {{mine-sweeper dimensions=dimensions difficulty=difficulty}}

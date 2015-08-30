@@ -4,7 +4,6 @@ const {
   set
 } = Ember;
 
-let matrix;
 export default Ember.Component.extend({
   dimensions: 10,
   difficulty: 'easy',
@@ -18,17 +17,20 @@ export default Ember.Component.extend({
   }),
   matrix: Ember.computed('matrixShow.[]',{
     get(){
+      const matrix = this.get('matrixShow');
       if(!matrix){
+        console.log('new matrix');
         const dimensions = this.get('dimensions');
         const difficulty = this.get('difficulty');
         const mine = this.get('mine');
         const emptyCell = this.get('emptyCell');
+        console.log(`${difficulty}`);
         let mineCount = 0;
-        matrix = [];
+        let matrix = [];
         for(let i=0;i<dimensions;i++){
           matrix[i] = new Array(dimensions);
           for(let j=0;j<dimensions;j++){
-            const rand = parseInt(Math.random(10)*10);
+            const rand = Math.floor(Math.random()*10);
             let value = emptyCell;
             switch(difficulty){
               case 'hard':
@@ -75,43 +77,49 @@ export default Ember.Component.extend({
     for(let i=0;i<dimensions;i++){
       for(let j=0;j<dimensions;j++){
         if(matrix[i][j].value !== mine){
-          if(i!==(dimensions-1)){
-            if(matrix[i+1][j].value === mine){
+          const big = dimensions-1;
+          const iPlus1 = i+1;
+          const iMinus1 = i-1;
+          const jPlus1 = j+1;
+          const jMinus1 = j-1;
+
+          if(i!==big){
+            if(matrix[iPlus1][j].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
-          if(j!==(dimensions-1)){
-            if(matrix[i][j+1].value === mine){
+          if(j!==big){
+            if(matrix[i][jPlus1].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
           if(i!==0){
-            if(matrix[i-1][j].value === mine){
+            if(matrix[iMinus1][j].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
           if(j!==0){
-            if(matrix[i][j-1].value === mine){
+            if(matrix[i][jMinus1].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
-          if(i!==(dimensions-1) && j!==0){
-            if(matrix[i+1][j-1].value === mine){
+          if(i!==big && j!==0){
+            if(matrix[iPlus1][jMinus1].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
-          if(j!==(dimensions-1) && i!==0){
-            if(matrix[i-1][j+1].value === mine){
+          if(j!==big && i!==0){
+            if(matrix[iMinus1][jPlus1].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
-          if(i!==(dimensions-1) && j!==(dimensions-1)){
-            if(matrix[i+1][j+1].value === mine){
+          if(i!==big && j!==big){
+            if(matrix[iPlus1][jPlus1].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
           if(i!==0 && j!==0){
-            if(matrix[i-1][j-1].value === mine){
+            if(matrix[iMinus1][jMinus1].value === mine){
               matrix[i][j].value = matrix[i][j].value+1;
             }
           }
@@ -120,50 +128,57 @@ export default Ember.Component.extend({
     }
   },
   _cleanAround(x,y){
+    const matrix = this.get('matrixShow');
     const dimensions = this.get('dimensions');
+    const big = dimensions-1;
+    const xPlus1 = x+1;
+    const xMinus1 = x-1;
+    const yPlus1 = y+1;
+    const yMinus1 = y-1;
 
-    if(x!==(dimensions-1)){
-      if(matrix[x+1][y].isVisibleCell === false){
-        this._cellAnalyzer(x+1,y);
+    if(x!==big){
+      if(matrix[xPlus1][y].isVisibleCell === false){
+        this._cellAnalyzer(xPlus1,y);
       }
     }
-    if(y!==(dimensions-1)){
-      if(matrix[x][y+1].isVisibleCell === false){
-        this._cellAnalyzer(x,y+1);
+    if(y!==big){
+      if(matrix[x][yPlus1].isVisibleCell === false){
+        this._cellAnalyzer(x,yPlus1);
       }
     }
     if(x!==0){
-      if(matrix[x-1][y].isVisibleCell === false){
-        this._cellAnalyzer(x-1,y);
+      if(matrix[xMinus1][y].isVisibleCell === false){
+        this._cellAnalyzer(xMinus1,y);
       }
     }
     if(y!==0){
-      if(matrix[x][y-1].isVisibleCell === false){
-        this._cellAnalyzer(x,y-1);
+      if(matrix[x][yMinus1].isVisibleCell === false){
+        this._cellAnalyzer(x,yMinus1);
       }
     }
-    if(x!==(dimensions-1) && y!==0){
-      if(matrix[x+1][y-1].isVisibleCell === false){
-        this._cellAnalyzer(x+1,y-1);
+    if(x!==big && y!==0){
+      if(matrix[xPlus1][yMinus1].isVisibleCell === false){
+        this._cellAnalyzer(xPlus1,yMinus1);
       }
     }
-    if(y!==(dimensions-1) && x!==0){
-      if(matrix[x-1][y+1].isVisibleCell === false){
-        this._cellAnalyzer(x-1,y+1);
+    if(y!==big && x!==0){
+      if(matrix[xMinus1][yPlus1].isVisibleCell === false){
+        this._cellAnalyzer(xMinus1,yPlus1);
       }
     }
-    if(x!==(dimensions-1) && y!==(dimensions-1)){
-      if(matrix[x+1][y+1].isVisibleCell === false){
-        this._cellAnalyzer(x+1,y+1);
+    if(x!==big && y!==big){
+      if(matrix[xPlus1][yPlus1].isVisibleCell === false){
+        this._cellAnalyzer(xPlus1,yPlus1);
       }
     }
     if(x!==0 && y!==0){
-      if(matrix[x-1][y-1].isVisibleCell === false){
-        this._cellAnalyzer(x-1,y-1);
+      if(matrix[xMinus1][yMinus1].isVisibleCell === false){
+        this._cellAnalyzer(xMinus1,yMinus1);
       }
     }
   },
   _cellAnalyzer(x,y){
+    const matrix = this.get('matrixShow');
     const value = matrix[x][y].value;
     const mine = this.get('mine');
     const emptyCell = this.get('emptyCell');
@@ -183,6 +198,7 @@ export default Ember.Component.extend({
   },
   actions:{
     cellClicked(x,y,value){
+      const matrix = this.get('matrixShow');
       const mine = this.get('mine');
       if(value === mine){
         set(matrix[x][y],'isVisibleCell',true);
@@ -202,11 +218,20 @@ export default Ember.Component.extend({
     },
     restart(){
       set(this,'matrixShow',null);
-      matrix = null;
+      //matrix = null;
       set(this,'mineCount',0);
       set(this,'emptyCell',0);
       set(this,'visibleCells',0);
       set(this,'result','');
+    },
+    cleanAll(){
+      const matrix = this.get('matrixShow');
+      const dimensions = this.get('dimensions');
+      for(let i=0;i<dimensions;i++){
+        for(let j=0;j<dimensions;j++){
+          set(matrix[i][j],'isVisibleCell',true);
+        }
+      }
     }
   }
 });

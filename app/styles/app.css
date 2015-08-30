@@ -1,5 +1,7 @@
 .mine-row{
   display:flex;
+  align-items: center;
+  justify-content: center;
 }
 .mine-cell{
   width:20px;
@@ -14,8 +16,4 @@
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.aligner-item {
-  max-width: 50%;
 }

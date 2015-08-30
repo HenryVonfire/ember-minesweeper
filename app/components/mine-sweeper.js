@@ -12,18 +12,11 @@ export default Ember.Component.extend({
   mineCount:0,
   visibleCells:0,
   emptyCell:0,
-  resetValues: Ember.computed('restart', function(){
-    const restart = this.get('restart');
-    if(restart){
-      matrix = null;
-      this.sendAction('action');
-    }
-  }),
-  totalCells: Ember.computed(function(){
+  totalCells: Ember.computed('dimensions',function(){
     const dimensions = this.get('dimensions');
     return dimensions * dimensions;
   }),
-  matrix: Ember.computed({
+  matrix: Ember.computed('matrixShow.[]',{
     get(){
       if(!matrix){
         const dimensions = this.get('dimensions');
@@ -68,8 +61,10 @@ export default Ember.Component.extend({
         }
         set(this,'mineCount',mineCount);
         this._adyacentMines(matrix,dimensions);
+        set(this,'matrixShow',matrix);
       }
-      return matrix;
+
+      return this.get('matrixShow');
     },
     set(key,value){
       console.log('set!!');
@@ -191,6 +186,7 @@ export default Ember.Component.extend({
       const mine = this.get('mine');
       if(value === mine){
         set(matrix[x][y],'isVisibleCell',true);
+        set(this,'result','you loose');
         console.log('you loose');
       } else {
         this._cellAnalyzer(x,y);
@@ -198,10 +194,19 @@ export default Ember.Component.extend({
         const totalCells = this.get('totalCells');
         const visibleCells = this.get('visibleCells');
         if((totalCells - mineCount) === visibleCells){
+          set(this,'result','you win');
           console.log('you win');
         }
         console.log(totalCells + ' - ' + mineCount + ' = ' + (totalCells - mineCount) + ' > ' + visibleCells);
       }
+    },
+    restart(){
+      set(this,'matrixShow',null);
+      matrix = null;
+      set(this,'mineCount',0);
+      set(this,'emptyCell',0);
+      set(this,'visibleCells',0);
+      set(this,'result','');
     }
   }
 });

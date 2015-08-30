@@ -1,7 +1,16 @@
-{{#each matrix key="@index" as |vector|}}
-<div class='mine-row'>
-  {{#each vector key="@index" as |item|}}
-    {{mine-cell x=item.x y=item.y value=item.value isVisibleCell=item.isVisibleCell action='cellClicked'}}
-  {{/each}}
+<div class=aligner>
+  <button {{action 'restart'}}>Restart Game</button>
 </div>
+
+
+{{#each matrix key="@index" as |vector|}}
+  <div class='mine-row'>
+    {{#each vector key="@index" as |item|}}
+      {{mine-cell x=item.x y=item.y value=item.value isVisibleCell=item.isVisibleCell action='cellClicked'}}
+    {{/each}}
+  </div>
 {{/each}}
+
+<div class=aligner>
+  <label>Result: {{result}}</label>
+</div>

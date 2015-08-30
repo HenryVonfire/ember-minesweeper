@@ -1,3 +1,15 @@
-<h2 id="title">Welcome to Ember.js</h2>
-
+<h2 id="title">Minesweeper in Ember.js</h2>
+<label>Number of rows/columns: {{input value=dimensions}}</label><br>
+<label>difficulty:</label>
+<select>
+  <option value="easy" selected="selected">easy</option>
+  <option value="medium">medium</option>
+  <option value="hard">hard</option>
+</select><br>
+<button {{action 'restart'}}>Restat Game</button><br>
+<div class="aligner-item">
+  {{#if isVisibleGame}}
+    {{mine-sweeper dimensions=dimensions difficulty=difficulty restart=restartGame action='restart'}}
+  {{/if}}
+</div>
 {{outlet}}

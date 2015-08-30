@@ -1,0 +1,21 @@
+.mine-row{
+  display:flex;
+}
+.mine-cell{
+  width:20px;
+  height:20px;
+  margin:1px;
+  text-align: center;
+}
+.mine-grey{
+  background-color: grey;
+}
+.aligner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aligner-item {
+  max-width: 50%;
+}
